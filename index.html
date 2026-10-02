@@ -1,0 +1,1254 @@
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RTSW-7000-28F-DC-DC — опросник по 14 драйверам финансовой модели</title>
+<style>
+:root{
+  --bg:#EDEFF2;
+  --bg-grid:rgba(11,37,69,.05);
+  --panel:#FAFBFC;
+  --white:#fff;
+  --border:#D5DBE3;
+  --border-strong:#B9C3D0;
+  --ink:#0B2545;
+  --ink-2:#143A6B;
+  --muted:#5A6E8C;
+  --muted-2:#8395AC;
+  --accent:#1E5EFF;
+  --accent-hover:#1550E0;
+  --accent-soft:rgba(30,94,255,.10);
+  --cogs:#0B7A9E;
+  --cogs-soft:rgba(11,122,158,.10);
+  --cyan:#00A3FF;
+  --danger:#C0392B;
+  --danger-soft:rgba(192,57,43,.10);
+  --ok:#0E7A4E;
+  --ok-soft:rgba(14,122,78,.08);
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 1px 2px rgba(11,37,69,.06), 0 8px 24px -14px rgba(11,37,69,.22);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--ink);
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:34px 34px,34px 34px;background-attachment:fixed;
+}
+button{font:inherit}
+
+/* ---------- TOPBAR ---------- */
+.topbar{
+  position:sticky;top:0;z-index:60;background:rgba(250,251,252,.9);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.topbar__in{
+  max-width:1320px;margin:0 auto;padding:10px 20px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.brand__dot{
+  width:10px;height:10px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 0 3px rgba(0,163,255,.18),0 0 10px rgba(0,163,255,.8);
+}
+.brand__name{font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--ink);text-transform:uppercase}
+.brand__sub{font-size:11px;color:var(--muted);letter-spacing:.02em}
+
+.progress{display:flex;flex-direction:column;gap:5px;flex:1 1 200px;min-width:150px;max-width:380px}
+.progress__text{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.progress__text.is-done{color:var(--ok)}
+.progress__track{height:6px;border-radius:3px;background:#DCE2EA;overflow:hidden}
+.progress__fill{
+  height:100%;width:0;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  box-shadow:0 0 10px rgba(30,94,255,.45);transition:width .3s ease;
+}
+.progress__fill.is-done{background:linear-gradient(90deg,#0E7A4E,#00A36A);box-shadow:0 0 10px rgba(14,122,78,.45)}
+.topbar__actions{display:flex;gap:8px;flex:0 0 auto;flex-wrap:wrap}
+
+.btn{
+  appearance:none;border:1px solid var(--border-strong);background:#fff;color:var(--ink);
+  font-size:12.5px;font-weight:600;letter-spacing:.01em;padding:8px 13px;
+  border-radius:var(--radius-sm);cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:border-color .15s,background .15s,color .15s,transform .15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:#F5F9FF}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:14px;height:14px;flex:0 0 auto}
+.btn--primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn--primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:#fff}
+.btn--primary:disabled{background:#B7C4D6;border-color:#B7C4D6;color:#fff;cursor:not-allowed}
+.btn--danger:hover{border-color:var(--danger);color:var(--danger);background:#FDF5F4}
+.btn--lg{padding:12px 22px;font-size:14px;border-radius:8px}
+.btn--lg svg{width:16px;height:16px}
+
+/* ---------- HERO ---------- */
+.hero{
+  max-width:1320px;margin:0 auto;padding:26px 20px 6px;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:30px;align-items:center;
+}
+.hero__media{
+  position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  background:linear-gradient(160deg,#F8FAFD 0%,#E6EBF2 55%,#DDE4EC 100%);
+  aspect-ratio:16/9;box-shadow:var(--shadow);
+}
+.hero__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;padding:6px}
+.hero__fallback{position:absolute;inset:0}
+.hero__fallback svg{width:100%;height:100%;display:block}
+.hero__eyebrow{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:9px;margin-bottom:12px;
+}
+.hero__eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.7}
+.hero h1{margin:0 0 12px;font-size:clamp(20px,2.3vw,29px);line-height:1.22;letter-spacing:-.015em;color:var(--ink);font-weight:750}
+.hero p{margin:0;color:var(--muted);font-size:14px;max-width:56ch}
+
+/* ---------- LAYOUT ---------- */
+.layout{
+  max-width:1320px;margin:0 auto;padding:24px 20px 40px;
+  display:grid;grid-template-columns:238px minmax(0,1fr);gap:26px;align-items:start;
+}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:82px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);padding:12px;box-shadow:var(--shadow)}
+.nav__title{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:2px 6px 10px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.nav__list{display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 230px);overflow:auto}
+.nav__item{
+  display:flex;gap:9px;align-items:center;padding:7px 8px;border-radius:6px;
+  text-decoration:none;color:var(--ink-2);font-size:12.5px;border-left:2px solid transparent;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.nav__item:hover{background:#EEF2F8;color:var(--ink)}
+.nav__item.is-active{background:var(--accent-soft);border-left-color:var(--accent);color:var(--accent);font-weight:600}
+.nav__item.is-missing{color:var(--danger)}
+.nav__item b{font-family:var(--mono);font-size:11px;font-weight:700;opacity:.8}
+.nav__item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- CARDS ---------- */
+.cards{display:flex;flex-direction:column;gap:18px}
+.card{
+  position:relative;background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+  scroll-margin-top:96px;transition:box-shadow .2s ease,border-color .2s ease;
+}
+.card:hover{border-color:#C3CEDA;box-shadow:0 1px 2px rgba(11,37,69,.06),0 16px 34px -20px rgba(11,37,69,.32)}
+.card::after{
+  content:"";position:absolute;top:8px;right:8px;width:13px;height:13px;
+  border-top:1px solid var(--border-strong);border-right:1px solid var(--border-strong);
+  opacity:.75;pointer-events:none;
+}
+.card__rail{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);z-index:1}
+.card--cogs .card__rail{background:var(--cogs)}
+.card--missing{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-soft),var(--shadow)}
+.card--missing .answer{border-color:var(--danger)}
+.card__head{
+  display:flex;gap:14px;align-items:flex-start;padding:16px 44px 14px 20px;
+  background:linear-gradient(180deg,#FFFFFF,#F6F9FC);border-bottom:1px solid var(--border);
+}
+.card__idx{
+  flex:0 0 auto;width:44px;height:38px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:17px;font-weight:700;letter-spacing:.02em;color:#fff;background:var(--accent);
+  clip-path:polygon(0 0,100% 0,100% 66%,66% 100%,0 100%);
+}
+.card--cogs .card__idx{background:var(--cogs)}
+.card__meta{min-width:0;flex:1}
+.card__tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px}
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid var(--border);
+  color:var(--muted);background:#fff;
+}
+.tag--rev{color:var(--accent);border-color:rgba(30,94,255,.35);background:var(--accent-soft)}
+.tag--cogs{color:var(--cogs);border-color:rgba(11,122,158,.35);background:var(--cogs-soft)}
+.card__title{margin:0 0 5px;font-size:17px;font-weight:700;line-height:1.3;color:var(--ink);letter-spacing:-.01em}
+.card__unit{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);display:flex;align-items:center;gap:7px}
+.card__unit::before{content:"";width:10px;height:1px;background:currentColor;opacity:.7}
+.card__toggle{
+  position:absolute;top:16px;right:16px;width:28px;height:28px;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--border);background:#fff;border-radius:6px;color:var(--muted);
+  transition:border-color .15s,color .15s,background .15s;z-index:2;
+}
+.card__toggle:hover{border-color:var(--accent);color:var(--accent);background:#F5F9FF}
+.card__toggle svg{transition:transform .22s ease}
+.card.is-collapsed .card__toggle svg{transform:rotate(-90deg)}
+.card.is-collapsed .card__body{display:none}
+.card__body{padding:18px 20px 20px}
+
+.qlabel{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px}
+.qlabel::before{content:"";display:inline-block;width:11px;height:1px;background:currentColor;vertical-align:middle;margin-right:7px;opacity:.65}
+.qlabel--accent{color:var(--accent)}
+.qlabel--danger{color:var(--danger)}
+.qrow{margin-bottom:15px}
+.qrow:last-child{margin-bottom:0}
+.formula{
+  font-family:var(--mono);font-size:12.5px;line-height:1.55;color:var(--ink-2);
+  background:#EDF1F7;border:1px solid var(--border);border-left:2px solid var(--accent);
+  border-radius:5px;padding:9px 12px;overflow-wrap:anywhere;
+}
+.card--cogs .formula{border-left-color:var(--cogs)}
+.note{margin:0;font-size:12.8px;line-height:1.55;color:var(--muted)}
+.qrow--question{background:#F4F7FB;border:1px solid var(--border);border-radius:7px;padding:13px 15px 14px}
+.question{margin:0;font-size:15.5px;line-height:1.6;font-weight:500;color:var(--ink)}
+.variants{margin:0;font-size:12.8px;line-height:1.55;color:var(--muted);font-style:italic}
+
+/* ---------- ANSWER BLOCK ---------- */
+.ablock{position:relative;margin-top:18px;padding:14px 16px 12px;border:1px solid var(--border);border-radius:8px;background:#F4F7FB}
+.ablock::before{content:"";position:absolute;left:16px;right:16px;top:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent),rgba(30,94,255,0))}
+.card--cogs .ablock::before{background:linear-gradient(90deg,var(--cogs),rgba(11,122,158,0))}
+.ablock__head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.ablock__status{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted-2);border:1px solid var(--border);border-radius:3px;padding:1px 6px;background:#fff;
+}
+.ablock__status.is-filled{color:var(--ok);border-color:rgba(14,122,78,.35);background:var(--ok-soft)}
+.ablock__status.is-missing{color:var(--danger);border-color:rgba(192,57,43,.4);background:var(--danger-soft)}
+.answer{
+  display:block;width:100%;min-height:104px;resize:vertical;overflow:hidden;
+  padding:11px 13px;border:1px solid var(--border-strong);border-radius:6px;
+  background:#fff;color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.6;
+  transition:border-color .15s,box-shadow .15s;
+}
+.answer::placeholder{color:#9AAABF}
+.answer:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,94,255,.13)}
+.ablock__foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px}
+.ablock__hint{font-size:11px;color:var(--muted-2);line-height:1.4}
+.ablock__count{font-family:var(--mono);font-size:11px;color:var(--muted-2);flex:0 0 auto}
+.ablock__links{margin-top:11px;padding-top:10px;border-top:1px dashed var(--border-strong)}
+.ablock__links ul{margin:5px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.ablock__links li{display:flex;gap:7px;align-items:flex-start;font-size:12.5px}
+.ablock__links li::before{content:"↗";color:var(--accent);font-size:11px;line-height:1.5;flex:0 0 auto}
+.ablock__links a{color:var(--accent);text-decoration:none;word-break:break-all;border-bottom:1px solid rgba(30,94,255,.3);transition:border-color .15s}
+.ablock__links a:hover{border-bottom-color:var(--accent)}
+.print-answer{display:none}
+
+/* ---------- SUBMIT AREA ---------- */
+.submit-area{
+  max-width:1320px;margin:8px auto 40px;padding:20px 20px 0;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  border-top:1px solid var(--border);
+}
+.submit-area__info{flex:1 1 320px;min-width:260px}
+.submit-area__title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:-.01em}
+.submit-area__text{font-size:12.8px;color:var(--muted);line-height:1.55}
+.submit-area__text b{color:var(--ink-2);font-weight:600}
+.submit-area__text code{font-family:var(--mono);font-size:12px;background:#EDF1F7;padding:1px 5px;border-radius:3px;color:var(--ink-2)}
+
+.submit-error{
+  max-width:1320px;margin:0 auto 20px;padding:14px 18px;
+  border:1px solid rgba(192,57,43,.4);background:var(--danger-soft);border-radius:8px;
+  color:var(--danger);font-size:13.5px;line-height:1.55;display:none;
+}
+.submit-error.is-visible{display:block}
+.submit-error b{display:block;margin-bottom:4px;font-weight:700}
+.submit-error ul{margin:6px 0 0;padding-left:20px;color:var(--danger)}
+.submit-error li{margin-bottom:2px}
+.submit-error button{
+  background:none;border:none;color:var(--danger);text-decoration:underline;cursor:pointer;
+  padding:0;font:inherit;font-weight:600;
+}
+
+.submit-result{
+  max-width:1320px;margin:0 auto 60px;padding:18px 20px;
+  border:1px solid var(--border);border-radius:10px;background:var(--panel);
+  box-shadow:var(--shadow);display:none;
+}
+.submit-result.is-visible{display:block}
+.submit-result__head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.submit-result__title{font-size:14px;font-weight:700;color:var(--ink)}
+.submit-result__hint{font-size:12px;color:var(--muted);line-height:1.5;max-width:640px}
+.submit-result__hint b{color:var(--ink-2)}
+.submit-result__body{
+  width:100%;min-height:180px;max-height:340px;resize:vertical;
+  font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--ink-2);
+  background:#EDF1F7;border:1px solid var(--border);border-radius:6px;padding:12px;
+}
+.submit-result__actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- NOTIFICATION (при открытии почтового клиента) ---------- */
+.notify{
+  position:fixed;right:20px;bottom:20px;z-index:80;
+  max-width:min(420px,calc(100vw - 40px));
+  background:#0B2545;color:#E9EFF7;border-radius:10px;padding:14px 16px 14px 16px;
+  box-shadow:0 12px 40px -14px rgba(11,37,69,.55),0 2px 6px rgba(11,37,69,.18);
+  display:flex;gap:12px;align-items:flex-start;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:transform .25s ease,opacity .25s ease;
+}
+.notify.is-visible{transform:translateY(0);opacity:1;pointer-events:auto}
+.notify__icon{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(0,163,255,.16);color:var(--cyan);
+  border:1px solid rgba(0,163,255,.4);
+}
+.notify__icon svg{width:14px;height:14px}
+.notify__icon--ok{background:rgba(14,122,78,.18);color:#3BD28F;border-color:rgba(14,122,78,.5)}
+.notify__icon--warn{background:rgba(192,57,43,.18);color:#FF8D7A;border-color:rgba(192,57,43,.5)}
+.notify__body{flex:1;min-width:0}
+.notify__title{font-size:13.5px;font-weight:700;letter-spacing:.01em;margin-bottom:3px}
+.notify__text{font-size:12.3px;line-height:1.5;color:#B9C8DD}
+.notify__text b{color:#E9EFF7;font-weight:600}
+.notify__close{
+  flex:0 0 auto;background:none;border:none;color:#8FA1BB;cursor:pointer;padding:2px;
+  font-size:16px;line-height:1;transition:color .15s;
+}
+.notify__close:hover{color:#E9EFF7}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr;gap:18px;padding-top:20px}
+  .hero__media{max-width:620px}
+  .layout{grid-template-columns:1fr;gap:14px;padding-top:16px}
+  .nav{position:static;padding:10px}
+  .nav__title{display:none}
+  .nav__list{flex-direction:row;overflow-x:auto;max-height:none;gap:6px;padding-bottom:4px}
+  .nav__item{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;flex:0 0 auto;padding:6px 9px}
+  .nav__item.is-active{border-left:none;border-bottom-color:var(--accent)}
+}
+@media (max-width:640px){
+  .topbar__in{padding:9px 14px;gap:10px}
+  .brand__sub{display:none}
+  .progress{flex-basis:100%;order:3;max-width:none}
+  .topbar__actions{flex:1 1 100%;order:4;justify-content:flex-end}
+  .topbar__actions .btn{padding:7px 10px;font-size:12px}
+  .topbar__actions .btn .btn-label{display:none}
+  .hero,.layout{padding-left:14px;padding-right:14px}
+  .nav__item span{display:none}
+  .card__head{padding:14px 42px 12px 16px;gap:11px}
+  .card__idx{width:38px;height:34px;font-size:15px}
+  .card__body{padding:15px 15px 17px}
+  .ablock{padding:12px 12px 10px}
+  .ablock__hint{display:none}
+  .question{font-size:14.5px}
+  .submit-area{padding:16px 14px 0;gap:14px}
+  .submit-area .btn--lg{width:100%;justify-content:center}
+  .notify{right:12px;left:12px;bottom:12px;max-width:none}
+}
+
+/* ---------- PRINT ---------- */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff !important;background-image:none !important;font-size:10.5pt;color:#000}
+  .topbar,.nav,.hero__media,.card__toggle,.ablock__foot,.ablock__links,.ablock__status,
+  .card::after,.submit-area,.submit-error,.submit-result,.notify{display:none !important}
+  .hero{display:block;padding:0 0 12px;max-width:none}
+  .hero__eyebrow{color:#333}
+  .hero h1{font-size:15pt;color:#000;margin-bottom:6px}
+  .hero p{color:#333;font-size:9.5pt}
+  .layout{display:block;padding:0;max-width:none}
+  .cards{gap:10px}
+  .card{break-inside:avoid;page-break-inside:avoid;box-shadow:none !important;border:1px solid #999 !important;background:#fff !important;margin-bottom:10px}
+  .card.is-collapsed .card__body{display:block !important}
+  .card__head{background:#fff !important;border-bottom:1px solid #ccc;padding:10px 12px}
+  .card__idx{background:#333 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card__rail{display:none}
+  .card__title{font-size:12pt}
+  .qrow--question{background:#fff;border:1px solid #ddd}
+  .formula{background:#f4f4f4;border-left:2px solid #555}
+  .ablock{background:#fff;border:1px dashed #999;break-inside:avoid}
+  .ablock::before{display:none}
+  .answer{display:none !important}
+  .print-answer{display:block;white-space:pre-wrap;word-break:break-word;font-size:10.5pt;line-height:1.5;min-height:38px;border:1px solid #ddd;border-radius:3px;padding:8px 10px;background:#fff}
+  .print-answer:empty::before{content:"—";color:#999}
+  a{color:#000;text-decoration:underline}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand">
+      <span class="brand__dot" aria-hidden="true"></span>
+      <div>
+        <div class="brand__name">RTSW-7000-28F-DC-DC</div>
+        <div class="brand__sub">Опросник по 14 драйверам финансовой модели</div>
+      </div>
+    </div>
+
+    <div class="progress">
+      <div class="progress__text" id="progressText">Заполнено 0 из 14</div>
+      <div class="progress__track"><div class="progress__fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="topbar__actions">
+      <button class="btn btn--primary" type="button" id="btnSubmitTop">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8l12-5.5-4 5.5 4 5.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span class="btn-label">Отправить</span>
+      </button>
+      <button class="btn" type="button" id="btnExport">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v8m0 0L4.8 6.3M8 9.5l3.2-3.2M2.5 11v2.2c0 .7.6 1.3 1.3 1.3h8.4c.7 0 1.3-.6 1.3-1.3V11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="btn-label">Экспорт JSON</span>
+      </button>
+      <button class="btn" type="button" id="btnPrint">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 6V2.2h7V6M4.5 12H3.2A1.2 1.2 0 0 1 2 10.8V7.2A1.2 1.2 0 0 1 3.2 6h9.6A1.2 1.2 0 0 1 14 7.2v3.6A1.2 1.2 0 0 1 12.8 12h-1.3M4.5 9.5h7v4.3h-7z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        <span class="btn-label">Печать</span>
+      </button>
+      <button class="btn btn--danger" type="button" id="btnClear">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M6 4V2.6h4V4M4 4l.7 9.1c0 .5.5.9 1 .9h4.6c.5 0 1-.4 1-.9L12 4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="btn-label">Очистить</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero__media">
+    <img src="rtsw-7000-28f-dc-dc.png" alt="Коммутатор RTSW-7000-28F-DC-DC"
+         onerror="this.style.display='none';var f=document.getElementById('heroFallback');if(f)f.style.display='block';">
+    <div class="hero__fallback" id="heroFallback" style="display:none">
+      <svg viewBox="0 0 640 360" role="img" aria-label="Коммутатор RTSW-7000-28F-DC-DC">
+        <defs>
+          <linearGradient id="g-front" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2B3542"/><stop offset=".55" stop-color="#1B222C"/><stop offset="1" stop-color="#12171E"/>
+          </linearGradient>
+          <linearGradient id="g-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#414E5F"/><stop offset="1" stop-color="#2A3340"/>
+          </linearGradient>
+          <linearGradient id="g-side" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#232B36"/><stop offset="1" stop-color="#151B23"/>
+          </linearGradient>
+          <pattern id="p-sfp" width="26" height="40" patternUnits="userSpaceOnUse">
+            <rect x="1.5" y="1.5" width="23" height="37" rx="2" fill="#0C1117" stroke="#3C4858"/>
+            <rect x="5" y="25" width="16" height="10" rx="1" fill="#18202B"/>
+            <rect x="5" y="6" width="16" height="3" rx="1.5" fill="#222C38"/>
+          </pattern>
+          <pattern id="p-rj" width="22" height="30" patternUnits="userSpaceOnUse">
+            <rect x="1.5" y="1.5" width="19" height="27" rx="2" fill="#0C1117" stroke="#3C4858"/>
+            <rect x="5" y="5" width="12" height="9" rx="1" fill="#18202B"/>
+          </pattern>
+          <radialGradient id="g-led"><stop offset="0" stop-color="#B6ECFF"/><stop offset="1" stop-color="#00A3FF"/></radialGradient>
+        </defs>
+        <rect width="640" height="360" fill="#EDF1F6"/>
+        <g opacity=".5" stroke="#D3DAE4" stroke-width="1">
+          <path d="M0 60h640M0 120h640M0 180h640M0 240h640M0 300h640"/>
+          <path d="M80 0v360M160 0v360M240 0v360M320 0v360M400 0v360M480 0v360M560 0v360"/>
+        </g>
+        <ellipse cx="336" cy="304" rx="268" ry="16" fill="#0B2545" opacity=".12"/>
+        <polygon points="30,170 82,128 662,128 610,170" fill="url(#g-top)" stroke="#4A5768"/>
+        <polygon points="610,170 662,128 662,248 610,290" fill="url(#g-side)" stroke="#4A5768"/>
+        <rect x="30" y="170" width="580" height="120" rx="4" fill="url(#g-front)" stroke="#4A5768"/>
+        <text x="346" y="156" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3" fill="#93A7BF">RTSW-7000-28F-DC-DC</text>
+        <g fill="#2A3340" stroke="#4A5768">
+          <circle cx="44" cy="182" r="3.2"/><circle cx="596" cy="182" r="3.2"/>
+          <circle cx="44" cy="278" r="3.2"/><circle cx="596" cy="278" r="3.2"/>
+        </g>
+        <g>
+          <circle cx="92" cy="222" r="16.5" fill="#0C1117" stroke="#3C4858" stroke-width="1.4"/>
+          <circle cx="92" cy="222" r="6.5" fill="#18202B"/>
+          <circle cx="138" cy="222" r="16.5" fill="#0C1117" stroke="#3C4858" stroke-width="1.4"/>
+          <circle cx="138" cy="222" r="6.5" fill="#18202B"/>
+        </g>
+        <g>
+          <circle cx="80" cy="192" r="3" fill="url(#g-led)"/>
+          <circle cx="94" cy="192" r="3" fill="url(#g-led)"/>
+          <circle cx="108" cy="192" r="3" fill="url(#g-led)"/>
+          <circle cx="122" cy="192" r="3" fill="#39434F"/>
+          <circle cx="136" cy="192" r="3" fill="#39434F"/>
+        </g>
+        <text x="76" y="268" font-family="ui-monospace,monospace" font-size="9.5" letter-spacing="1.2" fill="#6E8098">2× DC IN</text>
+        <line x1="172" y1="182" x2="172" y2="278" stroke="#3A4553"/>
+        <rect x="184" y="196" width="312" height="40" fill="url(#p-sfp)"/>
+        <rect x="184" y="240" width="312" height="40" fill="url(#p-sfp)"/>
+        <line x1="506" y1="182" x2="506" y2="278" stroke="#3A4553"/>
+        <rect x="518" y="215" width="88" height="30" fill="url(#p-rj)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero__text">
+    <div class="hero__eyebrow">Industrial questionnaire · v1.2</div>
+    <h1>14 ключевых драйверов финансовой модели производства RTSW-7000-28F-DC-DC</h1>
+    <p>Рабочий лист для интервью. Заполните все 14 ответов и нажмите «Отправить» — откроется почтовое приложение по умолчанию с готовым письмом на <b>2928498@gmail.com</b>.</p>
+  </div>
+</section>
+
+<div class="layout">
+  <aside class="nav" aria-label="Навигация по вопросам">
+    <div class="nav__title">Драйверы 01 — 14</div>
+    <nav class="nav__list" id="navList"></nav>
+  </aside>
+
+  <main class="content">
+    <div class="cards" id="cards"></div>
+  </main>
+</div>
+
+<div class="submit-error" id="submitError" role="alert" aria-live="polite"></div>
+
+<div class="submit-area">
+  <div class="submit-area__info">
+    <div class="submit-area__title" id="submitTitle">Готовы отправить опросник?</div>
+    <div class="submit-area__text" id="submitText">
+      При нажатии «Отправить» откроется <b>почтовое приложение по умолчанию</b> на вашем компьютере
+      (Outlook, Mail, Thunderbird и т. п.) с уже сформированным письмом. Проверьте текст и нажмите «Отправить» в самом приложении.
+      Письмо уйдёт на <b>2928498@gmail.com</b> с темой <code>Коммутатор rtsw-7000-28f-dc-dс</code>.
+    </div>
+  </div>
+  <button class="btn btn--primary btn--lg" type="button" id="btnSubmit">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8l12-5.5-4 5.5 4 5.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    Отправить опросник
+  </button>
+</div>
+
+<div class="submit-result" id="submitResult">
+  <div class="submit-result__head">
+    <div>
+      <div class="submit-result__title">Готово — почтовое приложение должно быть открыто</div>
+      <div class="submit-result__hint">
+        Должно было открыться <b>приложение почты по умолчанию</b> (Outlook / Mail / Thunderbird и т. п.) с готовым письмом на
+        <b>2928498@gmail.com</b> и темой <b>Коммутатор rtsw-7000-28f-dc-dс</b>. Проверьте текст и нажмите «Отправить» в приложении.
+        <br><br>
+        Если письмо не открылось (нет почтового клиента по умолчанию или браузер заблокировал переход) — нажмите
+        <b>«Открыть почтовое приложение снова»</b> или скопируйте готовый текст кнопкой ниже и вставьте его в письмо вручную.
+      </div>
+    </div>
+    <div class="submit-result__actions">
+      <button class="btn" type="button" id="btnReopen">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.5-3.5M3 2.5V5h2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Открыть почтовое приложение снова
+      </button>
+      <button class="btn" type="button" id="btnCopyBody">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="2.5" width="8" height="10" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M3.2 4.6A1.2 1.2 0 0 0 2.5 5.7v7.6c0 .7.5 1.2 1.2 1.2H9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Скопировать текст письма
+      </button>
+    </div>
+  </div>
+  <textarea class="submit-result__body" id="mailBody" readonly></textarea>
+</div>
+
+<!-- Уведомление о запуске почтового клиента -->
+<div class="notify" id="notify" role="status" aria-live="polite">
+  <div class="notify__icon" id="notifyIcon">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4l6 4.5L14 4M2.5 3h11A1.5 1.5 0 0 1 15 4.5v7A1.5 1.5 0 0 1 13.5 13h-11A1.5 1.5 0 0 1 1 11.5v-7A1.5 1.5 0 0 1 2.5 3z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="notify__body">
+    <div class="notify__title" id="notifyTitle">Открываем почтовое приложение…</div>
+    <div class="notify__text" id="notifyText">Формируем письмо на <b>2928498@gmail.com</b> с темой <b>Коммутатор rtsw-7000-28f-dc-dс</b>.</div>
+  </div>
+  <button class="notify__close" type="button" aria-label="Закрыть уведомление" id="notifyClose">×</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var RECIPIENT = '2928498@gmail.com';
+  var EMAIL_SUBJECT = 'Коммутатор rtsw-7000-28f-dc-dс';
+
+  /* ================= DATA ================= */
+  var DATA = [
+    { n:1, section:'Revenue', category:'Объем продаж', driver:'Плановый объем продаж', unit:'шт./год',
+      formula:'Выручка = Объем продаж × ASP; при ограничении мощности: Реализация = MIN(Спрос; Производственная мощность)',
+      note:'План желательно строить по месяцам. Для сценариев использовать Base / Downside / Upside. Не смешивать спрос и физическую возможность произвести.',
+      question:'Как вы сами видите реалистичный объем продаж RTSW-7000-28F-DC-DC на ближайший год: от чего он у вас обычно зависит — от уже понятных заказов, тендерного портфеля, активности партнеров или наличия продукта на складе? И какой объем вы считаете для себя базовым, осторожным и оптимистичным?',
+      variants:'Base / Downside / Upside, например: 1 000 / 700 / 1 300 шт. в год; либо объем по месяцам/кварталам' },
+    { n:2, section:'Revenue', category:'Объем продаж', driver:'Базовая отпускная цена (ASP) без НДС', unit:'руб./шт.',
+      formula:'Выручка без НДС = Реализовано, шт. × ASP без НДС',
+      note:'Использовать фактическую net-цену после скидок, а не прайс-лист. Если каналы продаж различаются — применять средневзвешенный ASP.',
+      question:'Если смотреть не на прайс, а на реальные сделки, по какой средней цене вы обычно продаете этот коммутатор? Цена заметно различается между прямыми клиентами, интеграторами, дистрибьюторами и крупными тендерами?',
+      variants:'Одна средняя цена; несколько цен по каналам; прайс минус стандартная скидка; индивидуальная цена по каждой крупной сделке' },
+    { n:3, section:'Revenue', category:'Объем продаж', driver:'Производственная мощность', unit:'шт./мес.',
+      formula:'Доступный выпуск = MIN(План спроса; Мощность × Коэффициент загрузки)',
+      note:'Учитывать узкое место: SMT, тестирование, burn-in, финальную сборку. Номинальная мощность без учета простоев завышает выпуск.',
+      question:'Если завтра заказов станет больше, сколько устройств вы реально сможете выпускать в месяц без серьезной перестройки производства? И где сегодня появляется первое ограничение — монтаж плат, комплектующие, сборка, прошивка, тестирование или люди?',
+      variants:'Фиксированная мощность, например 300 шт./мес.; диапазон 200–350; мощность зависит от сменности/комплектующих; есть конкретное узкое место' },
+    { n:4, section:'Revenue', category:'Объем продаж', driver:'Конверсия заказов в поставки', unit:'%',
+      formula:'Поставки, шт. = Заказы, шт. × Конверсия',
+      note:'Конверсия должна учитывать отмены, переносы и неисполнение контрактов. Для твердых контрактов может быть близка к 100%.',
+      question:'Когда заказ или проект уже появился в воронке, какая часть обычно действительно доходит до поставки? Бывают ли заметные отмены, переносы на следующий период или сокращение объема уже согласованных заказов?',
+      variants:'95–100% для подписанных контрактов; 70–90% для заказов; ниже для тендерного pipeline; разные коэффициенты по стадиям' },
+    { n:5, section:'Revenue', category:'Объем продаж', driver:'Сезонность продаж', unit:'коэффициент / % по месяцам',
+      formula:'Продажи месяца = Годовой объем × Доля месяца; Σ долей месяцев = 100%',
+      note:'Особенно важна для тендерных и бюджетных продаж. Годовой P&L меняет мало, но сильно влияет на cash flow и оборотный капитал.',
+      question:'Есть ли в течение года месяцы или кварталы, когда продажи заметно выше или ниже обычного? Например, из-за бюджетного цикла заказчиков, тендеров или закрытия проектов в конце года.',
+      variants:'Продажи равномерны; пики в Q4; слабый Q1; индивидуальная помесячная сезонность; зависит от крупных проектов' },
+    { n:6, section:'COGS', category:'BOM на единицу', driver:'Switching ASIC / ключевой процессор', unit:'руб./шт.',
+      formula:'BOM/шт. = ASIC + PCB/электроника + Портовая часть + Питание + Механика',
+      note:'Если закупается в валюте, цену нужно разделять на базовую валютную цену и FX. Не индексировать одновременно и валютную цену, и рублевую цену без проверки двойного счета.',
+      question:'Давайте разберем самый дорогой или критичный электронный компонент. Что это за ASIC/процессор, сколько он фактически стоит на одно устройство и в какой валюте закупается? Цена стабильная или зависит от партии и поставщика?',
+      variants:'Цена в CNY/USD/RUB; фиксированная цена; ступенчатая цена от объема; несколько поставщиков; закупка через дистрибьютора' },
+    { n:7, section:'COGS', category:'BOM на единицу', driver:'PCB + SMT-компоненты', unit:'руб./шт.',
+      formula:'COGS PCB/SMT = Стоимость PCB + Σ SMT-компонентов на 1 изделие',
+      note:'Лучше использовать landed cost: закупочная цена + логистика + таможня + потери/брак. При наличии точного BOM агрегировать позиции в этот блок.',
+      question:'Если объединить плату и все SMT-компоненты, во сколько сегодня обходится комплект на один готовый коммутатор? В этой цифре уже учтены монтаж, доставка, таможня и производственный брак или это только стоимость компонентов?',
+      variants:'Только BOM компонентов; PCB + компоненты; полный landed cost; PCB + SMT-монтаж; стоимость по партии' },
+    { n:8, section:'COGS', category:'BOM на единицу', driver:'Портовая часть: PHY, SFP/SFP+, RJ-45', unit:'руб./шт.',
+      formula:'Портовая часть/шт. = Σ (Количество компонента × Цена компонента)',
+      note:'SFP-модули не включать, если они не входят в комплект поставки. Четко разделить cages/PHY/разъемы и внешние трансиверы.',
+      question:'Что именно входит в стандартную комплектацию портовой части и сколько этот блок стоит на одно изделие? Важно понять: SFP-трансиверы продаются вместе с коммутатором или отдельно?',
+      variants:'Только PHY/cages/RJ-45; плюс SFP-модули; разные комплектации; часть компонентов входит в PCB-BOM' },
+    { n:9, section:'COGS', category:'BOM на единицу', driver:'Система питания, включая 2 DC БП', unit:'руб./шт.',
+      formula:'Питание/шт. = 2 × Цена DC БП + DC/DC + Power-management компоненты',
+      note:'Проверить, встроены ли БП полностью в изделие и входят ли резервные модули в стандартную комплектацию. Учитывать отказоустойчивость и гарантийный резерв отдельно.',
+      question:'Как устроена комплектация питания: два DC-блока всегда входят в стандартную поставку? Какова их закупочная или производственная стоимость вместе с остальной силовой частью на одно изделие?',
+      variants:'2 БП всегда входят; второй БП опциональный; собственное производство; покупной модуль; цена комплекта в RUB/CNY/USD' },
+    { n:10, section:'COGS', category:'BOM на единицу', driver:'Корпус, охлаждение и прочая механика', unit:'руб./шт.',
+      formula:'Механика/шт. = Корпус + Вентиляторы + Крепеж + Покрытие + Прочая механика',
+      note:'При собственном изготовлении корпуса не смешивать стоимость материалов с производственным трудом/амортизацией. При покупке корпуса использовать закупочную цену.',
+      question:'Корпус и механика производятся у вас или закупаются готовым комплектом? Если посмотреть на один коммутатор, какая полная стоимость корпуса, вентиляторов, крепежа и покрытия приходится на единицу?',
+      variants:'Покупной корпус; собственное производство; аутсорсинг металлообработки; единая цена комплекта; раздельная калькуляция' },
+    { n:11, section:'COGS', category:'Курс валют', driver:'CNY/RUB', unit:'руб./CNY',
+      formula:'CNY-BOM, руб. = CNY-BOM, CNY × CNY/RUB',
+      note:'Если расчеты фактически идут через USD, важно не дублировать валютную экспозицию. Использовать валюту реального договора и платежа.',
+      question:'Насколько закупки реально привязаны к юаню? Когда курс меняется, себестоимость реагирует сразу или есть запас компонентов и ранее зафиксированные цены, поэтому эффект проявляется через несколько месяцев?',
+      variants:'Прямые расчеты в CNY; цены в RUB, но индексируются по CNY; закупки через посредника; курс фиксируется при заказе/оплате' },
+    { n:12, section:'COGS', category:'Курс валют', driver:'Лаг переноса изменения курса в отпускную цену', unit:'мес.',
+      formula:'ASP(t) = ASP(t−1) × (1 + Перенос FX-роста), начиная через N месяцев',
+      note:'Критичен при фиксированных тендерных ценах. Нужно отделять технический лаг репрайсинга от доли роста себестоимости, которую рынок вообще позволяет перенести в цену.',
+      question:'Если курс юаня заметно вырастет, через сколько времени вы сможете поднять цену клиенту? И получается ли обычно переложить весь рост себестоимости или только его часть?',
+      variants:'Сразу; 1 месяц; 3 месяца; до следующего тендера/контракта; переносится 100% / 50% / не переносится' },
+    { n:13, section:'COGS', category:'Валютная доля BOM', driver:'Доля импортного / валютного BOM', unit:'% BOM',
+      formula:'FX-чувствительный BOM = Общий BOM × Валютная доля BOM',
+      note:'Считать по стоимости, а не по количеству компонентов. Локальный поставщик с валютной индексацией также может экономически относиться к валютной части.',
+      question:'Если взять полную материальную себестоимость устройства, какая ее часть экономически зависит от валюты? Даже если часть покупается в рублях, есть ли поставщики, которые фактически пересчитывают цену вслед за CNY или USD?',
+      variants:'Например 70% валютная / 30% рублевая; почти весь BOM валютный; только отдельные IC; часть RUB-закупок индексируется по FX' },
+    { n:14, section:'COGS', category:'Валютная доля BOM', driver:'Структура валютного BOM: USD / CNY / RUB', unit:'% BOM',
+      formula:'BOM = BOM_RUB + BOM_USD × FX_USD + BOM_CNY × FX_CNY; доли RUB+USD+CNY = 100%',
+      note:'Проверять сумму долей = 100%. Если есть EUR/другая валюта — добавлять отдельную компоненту, а не включать ее произвольно в USD.',
+      question:'Если разложить весь BOM по тому, от какой валюты реально зависит цена, как бы вы примерно поделили его между CNY, USD и RUB? Есть ли другие валюты или смешанная привязка?',
+      variants:'Например CNY 60% / USD 10% / RUB 30%; только CNY/RUB; RUB-поставщик с CNY-привязкой; есть EUR/другая валюта' }
+  ];
+
+  /* ================= STATE ================= */
+  var LS_KEY = 'rtsw7000_questionnaire_v1';
+  var state = {};
+  try {
+    var raw = localStorage.getItem(LS_KEY);
+    if (raw) state = JSON.parse(raw) || {};
+  } catch (e) { state = {}; }
+
+  var saveTimer = null;
+  function save() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+    }, 220);
+  }
+
+  /* ================= HELPERS ================= */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+  var URL_RE = /(https?:\/\/[^\s<>"'\)\]]+)/g;
+  function extractLinks(t) {
+    var m = String(t || '').match(URL_RE);
+    return m ? m : [];
+  }
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtDate(d) {
+    return pad2(d.getDate()) + '.' + pad2(d.getMonth() + 1) + '.' + d.getFullYear() +
+           ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+  }
+
+  /* ================= RENDER ================= */
+  var navList = document.getElementById('navList');
+  var cardsEl = document.getElementById('cards');
+  var navHTML = '';
+  var cardsHTML = '';
+
+  DATA.forEach(function (q) {
+    var sec = q.section === 'Revenue' ? 'rev' : 'cogs';
+
+    navHTML +=
+      '<a class="nav__item" href="#q' + q.n + '" data-target="q' + q.n + '">' +
+        '<b>' + pad2(q.n) + '</b><span>' + esc(q.driver) + '</span>' +
+      '</a>';
+
+    cardsHTML +=
+      '<article class="card card--' + sec + '" id="q' + q.n + '" data-n="' + q.n + '">' +
+        '<span class="card__rail"></span>' +
+        '<header class="card__head">' +
+          '<div class="card__idx">' + pad2(q.n) + '</div>' +
+          '<div class="card__meta">' +
+            '<div class="card__tags">' +
+              '<span class="tag tag--' + sec + '">' + esc(q.section) + '</span>' +
+              '<span class="tag">' + esc(q.category) + '</span>' +
+            '</div>' +
+            '<h3 class="card__title">' + esc(q.driver) + '</h3>' +
+            '<div class="card__unit">' + esc(q.unit) + '</div>' +
+          '</div>' +
+          '<button class="card__toggle" type="button" aria-label="Свернуть вопрос" aria-expanded="true">' +
+            '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">' +
+              '<path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>' +
+          '</button>' +
+        '</header>' +
+        '<div class="card__body">' +
+          '<div class="qblock">' +
+            '<div class="qrow">' +
+              '<span class="qlabel">Формула / расчетная логика</span>' +
+              '<div class="formula">' + esc(q.formula) + '</div>' +
+            '</div>' +
+            '<div class="qrow">' +
+              '<span class="qlabel">Важные примечания для расчета</span>' +
+              '<p class="note">' + esc(q.note) + '</p>' +
+            '</div>' +
+            '<div class="qrow qrow--question">' +
+              '<span class="qlabel">Вопрос бизнесу</span>' +
+              '<p class="question">' + esc(q.question) + '</p>' +
+            '</div>' +
+            '<div class="qrow">' +
+              '<span class="qlabel">Варианты ответа</span>' +
+              '<p class="variants">' + esc(q.variants) + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ablock">' +
+            '<div class="ablock__head">' +
+              '<span class="qlabel qlabel--accent" style="margin-bottom:0">Ответ</span>' +
+              '<span class="ablock__status" data-status>не заполнено</span>' +
+            '</div>' +
+            '<textarea class="answer" rows="4" spellcheck="true" data-n="' + q.n + '" placeholder="Введите ответ…"></textarea>' +
+            '<div class="ablock__foot">' +
+              '<span class="ablock__hint">Вставьте ссылки на обоснование, расчёты или файлы (при необходимости)</span>' +
+              '<span class="ablock__count" data-count>0</span>' +
+            '</div>' +
+            '<div class="ablock__links" data-links hidden>' +
+              '<span class="qlabel" style="margin-bottom:0">Ссылки в ответе</span>' +
+              '<ul></ul>' +
+            '</div>' +
+            '<div class="print-answer" data-print></div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+  });
+
+  navList.innerHTML = navHTML;
+  cardsEl.innerHTML = cardsHTML;
+
+  /* ================= CARD LOGIC ================= */
+  function autosize(ta) {
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(104, ta.scrollHeight) + 'px';
+  }
+
+  function refresh(ta) {
+    var n = ta.getAttribute('data-n');
+    var card = ta.closest('.card');
+    var val = ta.value;
+
+    autosize(ta);
+    card.querySelector('[data-count]').textContent = String(val.length);
+
+    var links = extractLinks(val);
+    var box = card.querySelector('[data-links]');
+    var ul = box.querySelector('ul');
+    if (links.length) {
+      ul.innerHTML = links.map(function (u) {
+        return '<li><a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(u) + '</a></li>';
+      }).join('');
+      box.hidden = false;
+    } else {
+      ul.innerHTML = '';
+      box.hidden = true;
+    }
+
+    var filled = val.trim().length > 0;
+    var st = card.querySelector('[data-status]');
+    st.textContent = filled ? 'заполнено' : 'не заполнено';
+    st.classList.toggle('is-filled', filled);
+    st.classList.remove('is-missing');
+
+    if (filled) {
+      card.classList.remove('card--missing');
+      var navLink = byId ? byId['q' + n] : null;
+      if (navLink) navLink.classList.remove('is-missing');
+    }
+  }
+
+  var byId = {};
+
+  Array.prototype.forEach.call(document.querySelectorAll('.answer'), function (ta) {
+    var n = ta.getAttribute('data-n');
+    if (state[n]) ta.value = state[n];
+    refresh(ta);
+
+    ta.addEventListener('input', function () {
+      state[n] = ta.value;
+      refresh(ta);
+      updateProgress();
+      save();
+      hideSubmitError();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.card__toggle'), function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.card');
+      var collapsed = card.classList.toggle('is-collapsed');
+      btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      btn.setAttribute('aria-label', collapsed ? 'Развернуть вопрос' : 'Свернуть вопрос');
+      if (!collapsed) {
+        var ta = card.querySelector('.answer');
+        if (ta) autosize(ta);
+      }
+    });
+  });
+
+  /* ================= PROGRESS ================= */
+  var progressFill = document.getElementById('progressFill');
+  var progressText = document.getElementById('progressText');
+
+  function countFilled() {
+    var c = 0;
+    DATA.forEach(function (q) { if (String(state[q.n] || '').trim()) c++; });
+    return c;
+  }
+
+  function updateProgress() {
+    var c = countFilled();
+    var total = DATA.length;
+    progressFill.style.width = (c / total * 100) + '%';
+    progressText.textContent = c === total
+      ? 'Все ' + total + ' заполнено — можно отправлять'
+      : 'Заполнено ' + c + ' из ' + total;
+    progressText.classList.toggle('is-done', c === total);
+    progressFill.classList.toggle('is-done', c === total);
+  }
+  updateProgress();
+
+  /* ================= NAV ACTIVE ================= */
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav__item'));
+  navItems.forEach(function (a) { byId[a.getAttribute('data-target')] = a; });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navItems.forEach(function (a) { a.classList.remove('is-active'); });
+        var link = byId[en.target.id];
+        if (link) {
+          link.classList.add('is-active');
+          if (window.innerWidth > 1000) {
+            var list = link.parentNode;
+            var top = link.offsetTop - list.offsetTop;
+            if (top < list.scrollTop || top > list.scrollTop + list.clientHeight - 40) {
+              list.scrollTo({ top: Math.max(0, top - 60), behavior: 'smooth' });
+            }
+          }
+        }
+      });
+    }, { rootMargin: '-96px 0px -65% 0px', threshold: 0 });
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) { io.observe(c); });
+  }
+
+  navItems.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var el = document.getElementById(a.getAttribute('data-target'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      navItems.forEach(function (x) { x.classList.remove('is-active'); });
+      a.classList.add('is-active');
+    });
+  });
+
+  /* ================= NOTIFICATION ================= */
+  var notify = document.getElementById('notify');
+  var notifyIcon = document.getElementById('notifyIcon');
+  var notifyTitle = document.getElementById('notifyTitle');
+  var notifyText = document.getElementById('notifyText');
+  var notifyClose = document.getElementById('notifyClose');
+  var notifyTimer = null;
+
+  var ICON_MAIL =
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4l6 4.5L14 4M2.5 3h11A1.5 1.5 0 0 1 15 4.5v7A1.5 1.5 0 0 1 13.5 13h-11A1.5 1.5 0 0 1 1 11.5v-7A1.5 1.5 0 0 1 2.5 3z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+  var ICON_OK =
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ICON_WARN =
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 4.5v5M8 12.2v.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+
+  function showNotify(type, title, text, autocloseMs) {
+    if (notifyTimer) { clearTimeout(notifyTimer); notifyTimer = null; }
+    notify.classList.remove('is-visible');
+    notifyIcon.classList.remove('notify__icon--ok', 'notify__icon--warn');
+    if (type === 'ok') { notifyIcon.classList.add('notify__icon--ok'); notifyIcon.innerHTML = ICON_OK; }
+    else if (type === 'warn') { notifyIcon.classList.add('notify__icon--warn'); notifyIcon.innerHTML = ICON_WARN; }
+    else { notifyIcon.innerHTML = ICON_MAIL; }
+    notifyTitle.textContent = title;
+    notifyText.innerHTML = text;
+    // небольшая задержка, чтобы transition сработал после замены контента
+    requestAnimationFrame(function () {
+      notify.classList.add('is-visible');
+    });
+    if (autocloseMs) {
+      notifyTimer = setTimeout(function () {
+        notify.classList.remove('is-visible');
+        notifyTimer = null;
+      }, autocloseMs);
+    }
+  }
+
+  notifyClose.addEventListener('click', function () {
+    notify.classList.remove('is-visible');
+    if (notifyTimer) { clearTimeout(notifyTimer); notifyTimer = null; }
+  });
+
+  /* ================= VALIDATION ================= */
+  var submitError = document.getElementById('submitError');
+
+  function showSubmitError(missing) {
+    var list = missing.map(function (n) {
+      var q = DATA[n - 1];
+      return '<li><button type="button" data-jump="' + n + '">' + pad2(n) + '. ' + esc(q.driver) + '</button></li>';
+    }).join('');
+    submitError.innerHTML =
+      '<b>Опросник можно отправить только целиком.</b>' +
+      'Не заполнено ' + missing.length + ' из ' + DATA.length + ' ответов:' +
+      '<ul>' + list + '</ul>' +
+      '<div style="margin-top:8px;font-size:12.5px">Нажмите на номер вопроса, чтобы перейти к нему.</div>';
+    submitError.classList.add('is-visible');
+
+    submitError.querySelectorAll('[data-jump]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var n = b.getAttribute('data-jump');
+        var card = document.getElementById('q' + n);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var ta = card && card.querySelector('.answer');
+        if (ta) setTimeout(function () { ta.focus(); }, 450);
+      });
+    });
+  }
+
+  function hideSubmitError() {
+    submitError.classList.remove('is-visible');
+    submitError.innerHTML = '';
+  }
+
+  function markMissing(missing) {
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) {
+      c.classList.remove('card--missing');
+      var st = c.querySelector('[data-status]');
+      if (st) st.classList.remove('is-missing');
+    });
+    navItems.forEach(function (a) { a.classList.remove('is-missing'); });
+
+    missing.forEach(function (n) {
+      var card = document.getElementById('q' + n);
+      if (card) {
+        card.classList.add('card--missing');
+        var st = card.querySelector('[data-status]');
+        if (st) { st.textContent = 'не заполнено'; st.classList.add('is-missing'); }
+      }
+      if (byId['q' + n]) byId['q' + n].classList.add('is-missing');
+    });
+  }
+
+  /* ================= MAIL BODY ================= */
+  function buildBody() {
+    var lines = [];
+    lines.push('14 КЛЮЧЕВЫХ ДРАЙВЕРОВ ФИНАНСОВОЙ МОДЕЛИ ПРОИЗВОДСТВА RTSW-7000-28F-DC-DC');
+    lines.push('Опросник для интервью с бизнесом');
+    lines.push('Дата заполнения: ' + fmtDate(new Date()));
+    lines.push('');
+    lines.push('============================================================');
+    lines.push('');
+
+    DATA.forEach(function (q) {
+      var ans = String(state[q.n] || '').trim();
+      lines.push(pad2(q.n) + '. ' + q.driver + ' (' + q.unit + ')');
+      lines.push('Раздел: ' + q.section + ' | Категория: ' + q.category);
+      lines.push('');
+      lines.push('ВОПРОС:');
+      lines.push(q.question);
+      lines.push('');
+      lines.push('ОТВЕТ:');
+      lines.push(ans || '—');
+      lines.push('');
+      lines.push('------------------------------------------------------------');
+      lines.push('');
+    });
+
+    return lines.join('\r\n');
+  }
+
+  /* ================= MAILTO ================= */
+  /*
+    Формируем mailto:-ссылку и кликаем по скрытой <a>.
+    Это открывает ПОЧТОВОЕ ПРИЛОЖЕНИЕ ПО УМОЛЧАНИЮ, установленное в ОС
+    (Outlook, Windows Mail, Apple Mail, Thunderbird и т. д.),
+    с уже заполненными полями «Кому», «Тема» и телом письма.
+    Пользователю остаётся проверить текст и нажать «Отправить» в приложении.
+  */
+  function openMailClient(body) {
+    var href = 'mailto:' + RECIPIENT +
+      '?subject=' + encodeURIComponent(EMAIL_SUBJECT) +
+      '&body=' + encodeURIComponent(body);
+
+    // Некоторые почтовые клиенты/браузеры имеют ограничение на длину URL (~2000–8000 символов).
+    // При превышении — предупреждаем пользователя, но всё равно пытаемся открыть.
+    var tooLong = href.length > 7000;
+
+    // Создаём временную ссылку и эмулируем клик — так надёжнее, чем location.href,
+    // особенно в браузерах, блокирующих прямую смену location.
+    var a = document.createElement('a');
+    a.href = href;
+    a.style.position = 'fixed';
+    a.style.left = '-9999px';
+    a.style.top = '0';
+    document.body.appendChild(a);
+    try {
+      a.click();
+    } catch (e) {
+      try { window.location.href = href; } catch (e2) {}
+    }
+    setTimeout(function () {
+      if (a.parentNode) a.parentNode.removeChild(a);
+    }, 1500);
+
+    return tooLong;
+  }
+
+  /* ================= SUBMIT ================= */
+  var submitResult = document.getElementById('submitResult');
+  var mailBodyEl = document.getElementById('mailBody');
+  var submitTitle = document.getElementById('submitTitle');
+  var submitText = document.getElementById('submitText');
+
+  var lastMailtoBody = '';
+
+  function doSubmit() {
+    var missing = [];
+    DATA.forEach(function (q) {
+      if (!String(state[q.n] || '').trim()) missing.push(q.n);
+    });
+
+    if (missing.length) {
+      markMissing(missing);
+      showSubmitError(missing);
+      var first = document.getElementById('q' + missing[0]);
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showNotify(
+        'warn',
+        'Опросник заполнен не полностью',
+        'Заполните все 14 драйверов — отправка возможна только целиком.',
+        4200
+      );
+      return;
+    }
+
+    hideSubmitError();
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) {
+      c.classList.remove('card--missing');
+    });
+
+    // 1. Собираем тело письма
+    var body = buildBody();
+    lastMailtoBody = body;
+
+    // 2. Показываем уведомление
+    showNotify(
+      'mail',
+      'Открываем почтовое приложение…',
+      'Формируем письмо на <b>' + RECIPIENT + '</b> с темой <b>' + esc(EMAIL_SUBJECT) + '</b>.',
+      0
+    );
+
+    // 3. Открываем почтовый клиент по умолчанию через mailto:
+    var tooLong = openMailClient(body);
+
+    // 4. Показываем блок с текстом письма (fallback) и статусом
+    mailBodyEl.value = body;
+    submitResult.classList.add('is-visible');
+    submitTitle.textContent = 'Готово — проверьте окно почтового приложения';
+    submitText.innerHTML =
+      'Должно было открыться <b>почтовое приложение по умолчанию</b> с готовым письмом:<br>' +
+      'Кому: <b>' + RECIPIENT + '</b> · Тема: <code>' + esc(EMAIL_SUBJECT) + '</code>.<br>' +
+      'Проверьте текст и нажмите «Отправить» в самом приложении.';
+
+    // 5. Обновляем уведомление через секунду
+    setTimeout(function () {
+      if (tooLong) {
+        showNotify(
+          'warn',
+          'Письмо сформировано',
+          'Текст длинный — некоторые почтовые клиенты могут не принять его целиком. ' +
+          'Если письмо открылось пустым, скопируйте текст кнопкой ниже и вставьте его в письмо вручную.',
+          8000
+        );
+      } else {
+        showNotify(
+          'ok',
+          'Почтовое приложение открыто',
+          'Проверьте получателя <b>' + RECIPIENT + '</b> и нажмите «Отправить» в приложении.',
+          5200
+        );
+      }
+    }, 1200);
+
+    setTimeout(function () {
+      submitResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 500);
+  }
+
+  document.getElementById('btnSubmit').addEventListener('click', doSubmit);
+  document.getElementById('btnSubmitTop').addEventListener('click', doSubmit);
+
+  /* Повторно открыть почтовое приложение */
+  document.getElementById('btnReopen').addEventListener('click', function () {
+    var body = lastMailtoBody || buildBody();
+    lastMailtoBody = body;
+
+    showNotify(
+      'mail',
+      'Открываем почтовое приложение…',
+      'Формируем письмо на <b>' + RECIPIENT + '</b>.',
+      0
+    );
+
+    var tooLong = openMailClient(body);
+
+    setTimeout(function () {
+      if (tooLong) {
+        showNotify('warn', 'Письмо сформировано', 'Если письмо открылось пустым — скопируйте текст кнопкой ниже.', 6000);
+      } else {
+        showNotify('ok', 'Почтовое приложение открыто', 'Проверьте получателя и нажмите «Отправить».', 5000);
+      }
+    }, 1000);
+  });
+
+  /* Копирование тела письма */
+  document.getElementById('btnCopyBody').addEventListener('click', function () {
+    var ta = mailBodyEl;
+    ta.removeAttribute('readonly');
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+
+    var btn = this;
+    var original = btn.innerHTML;
+
+    function ok() {
+      btn.innerHTML = 'Скопировано';
+      btn.disabled = true;
+      setTimeout(function () { btn.innerHTML = original; btn.disabled = false; }, 1400);
+      showNotify('ok', 'Текст письма скопирован', 'Вставьте его в письмо на <b>' + RECIPIENT + '</b> (Ctrl+V / Cmd+V).', 3600);
+    }
+    function fail() {
+      btn.innerHTML = 'Выделите вручную (Ctrl+C)';
+      setTimeout(function () { btn.innerHTML = original; btn.disabled = false; }, 1800);
+    }
+
+    var legacyOk = false;
+    try { legacyOk = document.execCommand('copy'); } catch (e) {}
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(function () {
+        ta.setAttribute('readonly', 'readonly');
+        ok();
+      }).catch(function () {
+        ta.setAttribute('readonly', 'readonly');
+        legacyOk ? ok() : fail();
+      });
+    } else {
+      ta.setAttribute('readonly', 'readonly');
+      legacyOk ? ok() : fail();
+    }
+  });
+
+  /* ================= EXPORT ================= */
+  document.getElementById('btnExport').addEventListener('click', function () {
+    var out = {
+      product: 'RTSW-7000-28F-DC-DC',
+      document: '14 ключевых драйверов финансовой модели — интервью с бизнесом',
+      exported_at: new Date().toISOString(),
+      answers: {}
+    };
+    DATA.forEach(function (q) {
+      out.answers[pad2(q.n)] = {
+        section: q.section,
+        category: q.category,
+        driver: q.driver,
+        unit: q.unit,
+        question: q.question,
+        answer: String(state[q.n] || '')
+      };
+    });
+
+    var d = new Date();
+    var stamp = d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+    var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'RTSW-7000-28F-DC-DC_answers_' + stamp + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
+  });
+
+  /* ================= PRINT ================= */
+  function preparePrint() {
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (card) {
+      var ta = card.querySelector('.answer');
+      var pr = card.querySelector('[data-print]');
+      if (!ta || !pr) return;
+      var val = ta.value.trim();
+      if (!val) { pr.textContent = ''; return; }
+      var links = extractLinks(val);
+      var plain = val.replace(URL_RE, '');
+      pr.textContent = plain.trim();
+      if (links.length) {
+        if (pr.textContent) pr.appendChild(document.createElement('br'));
+        links.forEach(function (u, i) {
+          if (i > 0) pr.appendChild(document.createElement('br'));
+          var a = document.createElement('a');
+          a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
+          a.textContent = u;
+          pr.appendChild(a);
+        });
+      }
+    });
+  }
+
+  if (window.matchMedia) window.addEventListener('beforeprint', preparePrint);
+
+  document.getElementById('btnPrint').addEventListener('click', function () {
+    preparePrint();
+    window.print();
+  });
+
+  /* ================= CLEAR ================= */
+  document.getElementById('btnClear').addEventListener('click', function () {
+    if (!window.confirm('Очистить все ответы по 14 драйверам? Действие необратимо.')) return;
+    state = {};
+    try { localStorage.removeItem(LS_KEY); } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll('.answer'), function (ta) {
+      ta.value = '';
+      refresh(ta);
+    });
+    hideSubmitError();
+    submitResult.classList.remove('is-visible');
+    mailBodyEl.value = '';
+    lastMailtoBody = '';
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) {
+      c.classList.remove('card--missing');
+    });
+    navItems.forEach(function (a) { a.classList.remove('is-missing'); });
+    updateProgress();
+    notify.classList.remove('is-visible');
+    if (notifyTimer) { clearTimeout(notifyTimer); notifyTimer = null; }
+  });
+
+  /* re-autosize on resize */
+  var rz;
+  window.addEventListener('resize', function () {
+    if (rz) clearTimeout(rz);
+    rz = setTimeout(function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.answer'), autosize);
+    }, 150);
+  });
+
+})();
+</script>
+</body>
+</html>
